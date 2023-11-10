@@ -18,7 +18,15 @@ export const SignUp = async (req, res, next) => {
       user_level,
     });
 
-    res.status(200).json({
+    
+    const options = {
+      expires:new Date(Date.now()+15*24*60*60*1000),
+        httpOnly:true,
+        secure:true,
+        sameSite:"none"
+    };
+
+    res.status(200).cookie("token", token, options).json({
       success: true,
       user,
     });
@@ -60,17 +68,17 @@ export const Login = async (req, res, next) => {
       });
     }
 
-    // const options = {
-    //   httpOnly: true,
-    //   maxAge: 1 * 60 * 60 * 1000,
-    //   sameSite:process.env.NODE_ENV==="Development" ? "lax":"none",
-    //   secure:process.env.NODE_ENV==="Development" ? false:true,
-    // };
-
     const options = {
-      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-      httpOnly: true,
+      expires:new Date(Date.now()+15*24*60*60*1000),
+        httpOnly:true,
+        secure:true,
+        sameSite:"none"
     };
+
+    // const options = {
+    //   expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    //   httpOnly: true,
+    // };
 
     res.status(200).cookie("token", token, options).json({
       success: true,
@@ -87,7 +95,7 @@ export const Login = async (req, res, next) => {
 
 export const GetUserDetail = async (req, res, next) => {
   try {
-    let user = await User.findById(req.user.id).populate("institute_id");
+    let user = await User.findById(req.user._id).populate("institute_id");
 
     res.status(200).json({
       success: true,
@@ -167,18 +175,12 @@ export const GetUserById=async(req,res,next)=>{
 
 export const logout = async (req, res, next) => {
   try {
-    res
-      .status(200)
-      // .cookie("token", null, {
-      //   expires: new Date(Date.now()),
-      //   sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-      //   secure: process.env.NODE_ENV === "Development" ? false : true,
-      // })
-      .cookie("token", null, {
-        expires: new Date(Date.now()),
-        httpOnly: true,
-      })
-      .json({
+    res.status(200).cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      secure:true,
+      sameSite: "none",
+      }).json({
         success: true,
         message: "Logged Out",
       });
