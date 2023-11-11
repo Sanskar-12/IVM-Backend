@@ -43,7 +43,7 @@ app.get("/api/:month", (req, res) => {
     });
 });
 
-app.get("/",()=>{
+app.get("/",(req,res)=>{
   res.status(200).json({
     message:"Hello"
   })
