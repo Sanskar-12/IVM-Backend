@@ -42,6 +42,13 @@ app.get("/api/:month", (req, res) => {
       Orders: [250, 80, 220, 130, 320, 90, 200, 500, 360, 700, 800, 350],
     });
 });
+
+app.get("/",()=>{
+  res.status(200).json({
+    message:"Hello"
+  })
+})
+
 app.use("/api/v1", router);
 app.use("/api/v1", productRouter);
 app.use("/api/v1", departmentRouter);
